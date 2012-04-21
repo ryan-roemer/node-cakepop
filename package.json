@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "coffeelint": "0.4.0"
-  }
+  },
+  "keywords": [
+    "coffeescript", "cake", "utils"
+  ]
 }
