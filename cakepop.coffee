@@ -30,6 +30,8 @@ class CakePop
 
   # Print "done" or error.
   #
+  # @param [Object] err Error.
+  #
   @printOnError: (err) =>
     @print err ? "Done."
 
@@ -65,16 +67,23 @@ class CakePop
       process.stderr.write stderr if stderr
       callback stdout.toString()
 
-  # Return list of process id's matching grep pattern.
+  # Return list of process id's matching egrep pattern.
+  #
+  # @param [String]   pattern   Egrep pattern.
+  # @param [Function] callback  Callback on process end (default: print).
   #
   @pids: (pattern, callback = @print) =>
     @exec "ps ax | egrep \"#{pattern}\" | egrep -v egrep", (matches) ->
       matches = matches?.split("\n") ? []
       callback (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
 
-  # Return list of files matching grep pattern.
+  # Return list of files matching egrep pattern.
   #
-  @find: (start, pattern, callback = @print) =>
+  # @param [String]   start     Starting directory (default: "./").
+  # @param [String]   pattern   Egrep pattern.
+  # @param [Function] callback  Callback on process end (default: print).
+  #
+  @find: (start = "./", pattern, callback = @print) =>
     start = "{#{start.join(',') }}" if Array.isArray start
     @exec "find #{start} -name \"#{pattern}\"", (files) ->
       files = files?.split("\n") ? []
@@ -82,11 +91,16 @@ class CakePop
 
   # Run coffeelint on an array of files, directory paths.
   #
+  # @param  [Array<String>]   paths     Array of file / directory paths.
+  # @param  [Object]          opts      Options.
+  # @option options [String]  suffix    CoffeeScript file suffix ("coffee").
+  # @option options [String]  config    Path to coffeelint config file.
+  # @param  [Function]        callback  Callback on process end (or null).
+  #
   @coffeelint: (paths = [], opts = {}, callback = @printOnError) =>
     suffix  = opts.suffix ? "coffee"
     filesRe = new RegExp ".*\.#{suffix}$"
-    isCs    = (name) ->
-      name is "Cakefile" or filesRe.test name
+    isCs    = (name) -> name is "Cakefile" or filesRe.test name
 
     config  = if opts.config then ["--file", opts.config] else []
     files   = (f for f in paths when isCs f)
