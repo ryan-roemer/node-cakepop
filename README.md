@@ -11,6 +11,7 @@ the future.
 
 Roadmap
 =======
+* Switch all callback signatures to (err, results)-form.
 * Add documentation.
 * Generate to JavaScript.
 * Tasks / Helpers:
