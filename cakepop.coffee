@@ -19,7 +19,7 @@ colors.setTheme
   debug:    'blue'
   error:    'red'
 
-class CakePop
+class Utils
 
   # Log to console if non-empty string.
   #
@@ -101,6 +101,8 @@ class CakePop
 
       callback files
 
+class Style
+
   # Run coffeelint on an array of files, directory paths.
   #
   # @param  [Array<String>]   paths     Array of file / directory paths.
@@ -109,7 +111,7 @@ class CakePop
   # @option options [String]  config    Path to coffeelint config file.
   # @param  [Function]        callback  Callback on process end (or null).
   #
-  @coffeelint: (paths = [], opts = {}, callback = @printOnError) =>
+  @coffeelint: (paths = [], opts = {}, callback = @printOnError) ->
     suffix  = opts.suffix ? "coffee"
     filesRe = new RegExp ".*\.#{suffix}$"
     isCs    = (name) -> name is "Cakefile" or filesRe.test name
@@ -119,9 +121,9 @@ class CakePop
     dirs    = (f for f in paths when not isCs f)
 
     cbs =
-      searchDirs: (cb) =>
+      searchDirs: (cb) ->
         if dirs.length > 0
-          @find dirs, "*.#{suffix}", (dirFiles) ->
+          Utils.find dirs, "*.#{suffix}", (dirFiles) ->
             cb null, dirFiles
 
         else
@@ -131,13 +133,15 @@ class CakePop
       runLint: ["searchDirs", (cb, results) ->
         dirFiles = results.searchDirs
         args = files.concat(dirFiles).concat(config)
-        CakePop.spawn "coffeelint", args, (code) =>
+        Utils.spawn "coffeelint", args, (code) =>
           err = if code is 0 then null else new Error "coffeelint failed"
       ]
 
-    async.auto cbs, (err) =>
-      @fail   "CoffeeScript style checks failed." if err
-      @print  "CoffeeScript style checks passed.\n".info
+    async.auto cbs, (err) ->
+      Utils.fail   "CoffeeScript style checks failed." if err
+      Utils.print  "CoffeeScript style checks passed.\n".info
       callback()
 
-module.exports = CakePop
+module.exports =
+  utils: Utils
+  style: Style
