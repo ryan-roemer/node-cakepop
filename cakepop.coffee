@@ -111,7 +111,7 @@ class Style
   # @option options [String]  config    Path to coffeelint config file.
   # @param  [Function]        callback  Callback on process end (or null).
   #
-  @coffeelint: (paths = [], opts = {}, callback = @printOnError) ->
+  @coffeelint: (paths = [], opts = {}, callback = Utils.printOnError) ->
     suffix  = opts.suffix ? "coffee"
     filesRe = new RegExp ".*\.#{suffix}$"
     isCs    = (name) -> name is "Cakefile" or filesRe.test name
