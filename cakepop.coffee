@@ -3,6 +3,7 @@
 ####
 child_proc  = require 'child_process'
 
+async       = require 'async'
 colors      = require 'colors'
 
 # Colors configuration
@@ -79,15 +80,24 @@ class CakePop
 
   # Return list of files matching egrep pattern.
   #
-  # @param [String]   start     Starting directory (default: "./").
-  # @param [String]   pattern   Egrep pattern.
-  # @param [Function] callback  Callback on process end (default: print).
+  # @param [Array<String>]  dirs      Array of directories (default: ["./"]).
+  # @param [String]         pattern   Egrep pattern.
+  # @param [Function]       callback  Callback on process end (default: print).
   #
-  @find: (start = "./", pattern, callback = @print) =>
-    start = "{#{start.join(',') }}" if Array.isArray start
-    @exec "find #{start} -name \"#{pattern}\"", (files) ->
-      files = files?.split("\n") ? []
-      callback (f for f in files when f)
+  @find: (dirs = ["./"], pattern, callback = @print) =>
+    finder = (dir, cb) =>
+      @exec "find #{dir} -name \"#{pattern}\"", (files) ->
+        files = files?.split("\n") ? []
+        cb (f for f in files when f)
+
+    async.map dirs, finder, (err, results) =>
+      # Merge arrays
+      files = []
+      if not err
+        for collection in results
+          files.concat collection
+
+      callback err, files
 
   # Run coffeelint on an array of files, directory paths.
   #
@@ -106,11 +116,26 @@ class CakePop
     files   = (f for f in paths when isCs f)
     dirs    = (f for f in paths when not isCs f)
 
-    @find dirs, "*.#{suffix}", (dirFiles) =>
-      args = files.concat(dirFiles).concat(config)
-      @spawn "coffeelint", args, (code) =>
-        @fail   "CoffeeScript style checks failed." unless code is 0
-        @print  "CoffeeScript style checks passed.\n".info
-        callback()
+    cbs =
+      searchDirs: (cb) =>
+        if dirs.length > 0
+          CakePop.find dirs, "*.#{suffix}", (dirFiles) ->
+            cb null, dirFiles
+
+        else
+          # No directories to search.
+          cb null, []
+
+      runLint: ["searchDirs", (cb, results) ->
+        dirFiles = results.searchDirs
+        args = files.concat(dirFiles).concat(config)
+        CakePop.spawn "coffeelint", args, (code) =>
+          err = if code is 0 then null else new Error "coffeelint failed"
+      ]
+
+    async.auto cbs, (err) =>
+      @fail   "CoffeeScript style checks failed." if err
+      @print  "CoffeeScript style checks passed.\n".info
+      callback()
 
 module.exports = CakePop
