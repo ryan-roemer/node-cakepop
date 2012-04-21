@@ -86,7 +86,7 @@ class CakePop
   #
   @find: (dirs = ["./"], pattern, callback = @print) =>
     finder = (dir, cb) =>
-      @exec "find #{dir} -name \"#{pattern}\"", (files) ->
+      @exec "find \"#{dir}\" -name \"#{pattern}\"", (files) ->
         files = files?.split("\n") ? []
         cb null, (f for f in files when f)
 
