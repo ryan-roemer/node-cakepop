@@ -88,16 +88,18 @@ class CakePop
     finder = (dir, cb) =>
       @exec "find #{dir} -name \"#{pattern}\"", (files) ->
         files = files?.split("\n") ? []
-        cb (f for f in files when f)
+        cb null, (f for f in files when f)
 
     async.map dirs, finder, (err, results) =>
+      @fail err if err
+
       # Merge arrays
       files = []
       if not err
         for collection in results
-          files.concat collection
+          files = files.concat collection
 
-      callback err, files
+      callback files
 
   # Run coffeelint on an array of files, directory paths.
   #
@@ -119,7 +121,7 @@ class CakePop
     cbs =
       searchDirs: (cb) =>
         if dirs.length > 0
-          CakePop.find dirs, "*.#{suffix}", (dirFiles) ->
+          @find dirs, "*.#{suffix}", (dirFiles) ->
             cb null, dirFiles
 
         else
