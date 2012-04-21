@@ -84,10 +84,13 @@ class CakePop
   #
   @coffeelint: (paths = [], opts = {}, callback = @printOnError) =>
     suffix  = opts.suffix ? "coffee"
-    config  = if opts.config then ["--file", opts.config] else []
     filesRe = new RegExp ".*\.#{suffix}$"
-    files   = (f for f in paths when filesRe.test f)
-    dirs    = (f for f in paths when not filesRe.test f)
+    isCs    = (name) ->
+      name is "Cakefile" or filesRe.test name
+
+    config  = if opts.config then ["--file", opts.config] else []
+    files   = (f for f in paths when isCs f)
+    dirs    = (f for f in paths when not isCs f)
 
     @find dirs, "*.#{suffix}", (dirFiles) =>
       args = files.concat(dirFiles).concat(config)
