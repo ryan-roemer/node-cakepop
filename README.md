@@ -12,11 +12,16 @@ Documentation is presently in source comments in `cakepop.coffee`. While not
 ideal, the source is quite readable. There will be a more friendly version in
 the future.
 
+**Warning**: The library is currently undergoing a lot of restructuing and
+change, so expect the API to drastically change until things settle down.
+Breaking changes will be versioned (with git tags and in NPM), but that's
+about it for now.
+
 Installation
 ============
 To get the library:
 
-    npm install cakepop
+    $ npm install cakepop
 
 CakePop does **not** install dependencies for tasks that are shell-invoked,
 to keep the library small and let the user install the proper version of a
