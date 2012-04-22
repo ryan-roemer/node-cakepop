@@ -1,7 +1,8 @@
 cakepop = require "./cakepop"
+style   = new cakepop.Style()
 
 task "dev:coffeelint", "Run CoffeeScript style checks.", ->
-  cakepop.style.coffeelint [
+  style.coffeelint [
     "Cakefile"
     "cakepop.coffee"
   ]

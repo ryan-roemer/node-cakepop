@@ -5,6 +5,7 @@ child_proc  = require 'child_process'
 
 async       = require 'async'
 colors      = require 'colors'
+extend      = require 'deep-extend'
 fileUtils   = require 'file-utils'
 
 # Colors configuration
@@ -90,11 +91,12 @@ class Utils
     finder = (dir, cb) =>
       pattern = new RegExp pattern if typeof pattern is 'string'
       paths   = []
+      file    = new fileUtils.File dir
       filter  = (name, path) ->
         paths.push path if pattern.test name
         true
 
-      (new fileUtils.File dir).list filter, (err) ->
+      file.list filter, (err) ->
         cb err, paths
 
     async.map dirs, finder, (err, results) =>
@@ -107,20 +109,39 @@ class Utils
 
 class Style
 
+  # Constructor.
+  #
+  # Options are in the following (default) format:
+  #
+  #   coffee:
+  #     bin:    "coffeelint"  // CoffeeScript binary path / name (if in PATH)
+  #     suffix: "coffee"      // File suffix to match.
+  #     config: null          // Or "path/to/config.json"
+  #
+  # @param  [Object]      opts          Options.
+  # @option opts [String] coffee.bin    coffeeelint binary path.
+  # @option opts [String] coffee.suffix CoffeeScript file suffix.
+  # @option opts [String] coffee.config Path to coffeelint config file.
+  #
+  constructor: (opts) ->
+    defaults =
+      coffee:
+        bin:    "coffeelint"
+        suffix: "coffee"
+        config: null
+
+    @coffee = extend defaults.coffee, (opts?.coffee ? {})
+
   # Run coffeelint on an array of files, directory paths.
   #
   # @param  [Array<String>]   paths     Array of file / directory paths.
-  # @param  [Object]          opts      Options.
-  # @option options [String]  suffix    CoffeeScript file suffix ("coffee").
-  # @option options [String]  config    Path to coffeelint config file.
   # @param  [Function]        callback  Callback on process end (printCallback).
   #
-  @coffeelint: (paths = [], opts = {}, callback = Utils.printCallback) ->
-    suffix  = opts.suffix ? "coffee"
-    filesRe = new RegExp ".*\.#{suffix}$"
+  coffeelint: (paths = [], callback = Utils.printCallback) =>
+    filesRe = new RegExp ".*\.#{@coffee.suffix}$"
     isCs    = (name) -> name is "Cakefile" or filesRe.test name
 
-    config  = if opts.config then ["--file", opts.config] else []
+    config  = if @coffee.config then ["--file", @coffee.config] else []
     files   = (f for f in paths when isCs f)
     dirs    = (f for f in paths when not isCs f)
 
@@ -137,7 +158,7 @@ class Style
       runLint: ["searchDirs", (cb, results) ->
         dirFiles = results.searchDirs
         args = files.concat(dirFiles).concat(config)
-        Utils.spawn "coffeelint", args, (code) =>
+        Utils.spawn "coffeelint", args, (code) ->
           err = if code is 0 then null else new Error "coffeelint failed"
           cb err
       ]
@@ -145,8 +166,8 @@ class Style
     async.auto cbs, (err) ->
       Utils.fail   "CoffeeScript style checks failed." if err
       Utils.print  "CoffeeScript style checks passed.\n".info
-      callback err if callback
+      callback err
 
 module.exports =
   utils: Utils
-  style: Style
+  Style: Style
