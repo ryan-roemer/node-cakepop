@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>CakePop v0.0.6</title>
+  <link rel='stylesheet' href='../assets/codo.css' type='text/css'>
+  <script src='../assets/codo.js'></script>
+  <script src='../assets/search_data.js'></script>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../class_index.html' title='Index'>Index</a>
+    &raquo;
+    <span class='title'>Utils</span>
+    <nav>
+      <ul>
+        <li class='noframes'>
+          (<a class='noframes' href='#'>no frames</a>)
+        </li>
+      </ul>
+    </nav>
+    <div id='search'>
+      <a id='class_list_link' href='../class_list.html'>Classes</a>
+      <a id='mixin_list_link' href='../mixin_list.html'>Mixins</a>
+      <a id='method_list_link' href='../method_list.html'>Methods</a>
+      <a id='file_list_link' href='../file_list.html'>Files</a>
+    </div>
+  </div>
+  <iframe id='search_frame'></iframe>
+  <div id='fuzzySearch'>
+    <input type='text'>
+    <ol></ol>
+  </div>
+  <div id='help'>
+    <p>
+      Quickly fuzzy find classes, mixins, methods, file:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-T</span>
+        Open fuzzy finder dialog
+      </li>
+    </ul>
+    <p>
+      In frame mode you can toggle the list naviation frame on the left side:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-L</span>
+        Toggle list view
+      </li>
+    </ul>
+    <p>
+      You can focus a list in frame mode or toggle a tab in frameless mode:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-C</span>
+        Class list
+      </li>
+      <li>
+        <span>Ctrl-I</span>
+        Mixin list
+      </li>
+      <li>
+        <span>Ctrl-M</span>
+        Method list
+      </li>
+      <li>
+        <span>Ctrl-F</span>
+        File list
+      </li>
+    </ul>
+    <p>
+      You can focus and blur the search input:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-S</span>
+        Focus search input
+      </li>
+      <li>
+        <span>Esc</span>
+        Blur search input
+      </li>
+    </ul>
+    <p>
+      In frameless mode you can close the list tab:
+    </p>
+    <ul>
+      <li>
+        <span>Esc</span>
+        Close list tab
+      </li>
+    </ul>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        Utils
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>cakepop.coffee</td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>Static utility methods. </p> <p>Can be used directly (not instance methods). </p> 
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Cakefile usage
+    </h4>
+    <pre><code class='coffee'>utils = require(&quot;cakepop&quot;).utils
+task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
+  utils.print &quot;Hello World!&quot;</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Class Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#print-class'>
+        + (void) <strong>print</strong>(data)
+      </a>
+    </span>
+    <span class='desc'>
+      Log to console if non-empty string.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#printCallback-class'>
+        + (void) <strong>printCallback</strong>(err, data)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Print error of data message.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#fail-class'>
+        + (void) <strong>fail</strong>(msg)
+      </a>
+    </span>
+    <span class='desc'>
+      Log failure and exit process.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#spawn-class'>
+        + (void) <strong>spawn</strong>(cmd, args = [], callback = null)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Spawn with log pipes to stdout, stderr.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#exec-class'>
+        + (void) <strong>exec</strong>(cmd, callback = @printCallback)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Exec with log hooks to stdout, stderr.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#pids-class'>
+        + (void) <strong>pids</strong>(pattern, callback = @printCallback)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Return list of process id's matching egrep pattern.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#find-class'>
+        + (void) <strong>find</strong>(dirs = ["./"], pattern, callback = @printCallback)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Return list of files matching egrep pattern.
+    </span>
+  </li>
+</ul>
+      <h2>Class Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='print-class'>
+      + (void) <strong>print</strong>(data)
+    </p>
+    <div class='docstring'>
+  <p>Log to console if non-empty string. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>data</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>String to print.</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='printCallback-class'>
+      + (void) <strong>printCallback</strong>(err, data)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Print error of data message. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>err</span>
+      <span class='type'>
+        (<tt>Object</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Error.</span>
+    </li>
+    <li>
+      <span class='name'>data</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>String to print.</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='fail-class'>
+      + (void) <strong>fail</strong>(msg)
+    </p>
+    <div class='docstring'>
+  <p>Log failure and exit process. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>msg</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Failure message.</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='spawn-class'>
+      + (void) <strong>spawn</strong>(cmd, args = [], callback = null)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Spawn with log pipes to stdout, stderr. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>cmd</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Command / binary path.</span>
+    </li>
+    <li>
+      <span class='name'>args</span>
+      <span class='type'>
+        (<tt>Array<String></tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Array of arguments to command.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (or null).</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='exec-class'>
+      + (void) <strong>exec</strong>(cmd, callback = @printCallback)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Exec with log hooks to stdout, stderr. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>cmd</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Command and arguments.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (printCallback).</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='pids-class'>
+      + (void) <strong>pids</strong>(pattern, callback = @printCallback)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Return list of process id&#39;s matching egrep pattern. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>pattern</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Egrep pattern.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (printCallback).</span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='find-class'>
+      + (void) <strong>find</strong>(dirs = ["./"], pattern, callback = @printCallback)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Return list of files matching egrep pattern. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>dirs</span>
+      <span class='type'>
+        (<tt>Array<String></tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Array of directories (default: ["./"]).</span>
+    </li>
+    <li>
+      <span class='name'>pattern</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>RegExp or string.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (printCallback).</span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  Generated on
+  Sun Apr 22 2012 15:46:23 GMT-0400 (EDT)
+  by
+  <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
+  v0.7.0
+  (Node.js v0.6.15).
+  &#10034;
+  Press Ctrl-h to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/#!/netzpirat'>@netzpirat</a>
+  &#10034;
+  <a href='https://mksoft.ch'>mksoft.ch</a>
+</div>
+  </body>
+</html>

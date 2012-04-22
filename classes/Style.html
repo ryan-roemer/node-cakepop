@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>CakePop v0.0.6</title>
+  <link rel='stylesheet' href='../assets/codo.css' type='text/css'>
+  <script src='../assets/codo.js'></script>
+  <script src='../assets/search_data.js'></script>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../class_index.html' title='Index'>Index</a>
+    &raquo;
+    <span class='title'>Style</span>
+    <nav>
+      <ul>
+        <li class='noframes'>
+          (<a class='noframes' href='#'>no frames</a>)
+        </li>
+      </ul>
+    </nav>
+    <div id='search'>
+      <a id='class_list_link' href='../class_list.html'>Classes</a>
+      <a id='mixin_list_link' href='../mixin_list.html'>Mixins</a>
+      <a id='method_list_link' href='../method_list.html'>Methods</a>
+      <a id='file_list_link' href='../file_list.html'>Files</a>
+    </div>
+  </div>
+  <iframe id='search_frame'></iframe>
+  <div id='fuzzySearch'>
+    <input type='text'>
+    <ol></ol>
+  </div>
+  <div id='help'>
+    <p>
+      Quickly fuzzy find classes, mixins, methods, file:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-T</span>
+        Open fuzzy finder dialog
+      </li>
+    </ul>
+    <p>
+      In frame mode you can toggle the list naviation frame on the left side:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-L</span>
+        Toggle list view
+      </li>
+    </ul>
+    <p>
+      You can focus a list in frame mode or toggle a tab in frameless mode:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-C</span>
+        Class list
+      </li>
+      <li>
+        <span>Ctrl-I</span>
+        Mixin list
+      </li>
+      <li>
+        <span>Ctrl-M</span>
+        Method list
+      </li>
+      <li>
+        <span>Ctrl-F</span>
+        File list
+      </li>
+    </ul>
+    <p>
+      You can focus and blur the search input:
+    </p>
+    <ul>
+      <li>
+        <span>Ctrl-S</span>
+        Focus search input
+      </li>
+      <li>
+        <span>Esc</span>
+        Blur search input
+      </li>
+    </ul>
+    <p>
+      In frameless mode you can close the list tab:
+    </p>
+    <ul>
+      <li>
+        <span>Esc</span>
+        Close list tab
+      </li>
+    </ul>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        Style
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>cakepop.coffee</td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>Style / static checker utilities. </p> <p>Instance methods (instantiate a class with optional configurations.) </p> 
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Cakefile usage
+    </h4>
+    <pre><code class='coffee'>style = new (require(&quot;cakepop&quot;).Style)()
+task &quot;dev:coffeelint&quot;, &quot;Run CoffeeScript style checks.&quot;, -&gt;
+  style.coffeelint SOURCE [
+    &quot;foo.coffee&quot;
+    &quot;src_dir&quot;
+  ]</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#constructor-instance'>
+        - (void) <strong>constructor</strong>(opts)
+      </a>
+    </span>
+    <span class='constructor note title'>Constructor</span>
+    <span class='desc'>
+      Constructor.
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#coffeelint-instance'>
+        - (void) <strong>coffeelint</strong>(paths = [], callback = Utils.printCallback)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Run coffeelint on an array of files, directory paths.
+    </span>
+  </li>
+</ul>
+      <h2>Constructor Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='constructor-instance'>
+      - (void) <strong>constructor</strong>(opts)
+    </p>
+    <div class='docstring'>
+  <p>Constructor. </p> <p>Options are in the following (default) format: </p> 
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffee'>coffee:
+  bin:    &quot;coffeelint&quot;
+  suffix: &quot;coffee&quot;
+  config: null</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>opts</span>
+      <span class='type'>
+        (<tt>Object</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Options.</span>
+    </li>
+  </ul>
+  <h3>
+    Options Hash:
+    (opts):
+  </h3>
+  <ul class='options'>
+    <li>
+      <span class='name'>coffee.bin</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>coffeelint binary path.</span>
+    </li>
+    <li>
+      <span class='name'>coffee.suffix</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>CoffeeScript file suffix.</span>
+    </li>
+    <li>
+      <span class='name'>coffee.config</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Path to coffeelint config file.</span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='coffeelint-instance'>
+      - (void) <strong>coffeelint</strong>(paths = [], callback = Utils.printCallback)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Run coffeelint on an array of files, directory paths. </p> <p><strong>Note</strong>: The <code>coffeelint</code> binary must be installed separately and available to a shell invocation. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>paths</span>
+      <span class='type'>
+        (<tt>Array<String></tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Array of file / directory paths.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (printCallback).</span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  Generated on
+  Sun Apr 22 2012 15:46:23 GMT-0400 (EDT)
+  by
+  <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
+  v0.7.0
+  (Node.js v0.6.15).
+  &#10034;
+  Press Ctrl-h to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/#!/netzpirat'>@netzpirat</a>
+  &#10034;
+  <a href='https://mksoft.ch'>mksoft.ch</a>
+</div>
+  </body>
+</html>
