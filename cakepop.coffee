@@ -107,6 +107,61 @@ class Utils
 
       callback err, files
 
+class CoffeeBuild
+
+  # Constructor.
+  #
+  # Options are in the following (default) format:
+  #
+  #   coffee:
+  #     bin:    "coffee"
+  #     suffix: "coffee"
+  #
+  # @param  [Object]      opts          Options.
+  # @option opts [String] coffee.bin    CoffeeScript binary path.
+  # @option opts [String] coffee.suffix CoffeeScript file suffix.
+  #
+  constructor: (opts) ->
+    defaults =
+      coffee:
+        bin:    "coffee"
+        suffix: "coffee"
+
+    @coffee = extend defaults.coffee, (opts?.coffee ? {})
+
+  # Run coffeelint on an array of files, directory paths.
+  #
+  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
+  #                                   Use string for files and object for
+  #                                   for source/dest directories.
+  # @param  [Function]      callback  Callback on process end (printCallback).
+  #
+  build: (paths = [], callback = Utils.printCallback) =>
+    files = (p for p in paths when typeof p is 'string')
+    dirs  = (p for p in paths when typeof p isnt 'string')
+
+    build = (args, cb) =>
+      Utils.spawn "#{@coffee.bin}", args, (code) ->
+        err = if code is 0 then null else new Error "build failed"
+        cb err
+
+    buildDir = (pair, cb) ->
+      src = Object.keys(pair)[0]
+      dst = pair[src]
+      build ["--compile", "--output", dst, src], cb
+
+    cbs =
+      buildFiles: (cb) ->
+        return cb null if files.length < 1
+        build ["--compile"].concat(files), cb
+
+      buildDirs: (cb) ->
+        async.forEachSeries dirs, buildDir, cb
+
+    async.series cbs, (err) ->
+      callback err
+
+
 class Style
 
   # Constructor.
@@ -134,8 +189,8 @@ class Style
 
   # Run coffeelint on an array of files, directory paths.
   #
-  # @param  [Array<String>]   paths     Array of file / directory paths.
-  # @param  [Function]        callback  Callback on process end (printCallback).
+  # @param  [Array<String>] paths     Array of file / directory paths.
+  # @param  [Function]      callback  Callback on process end (printCallback).
   #
   coffeelint: (paths = [], callback = Utils.printCallback) =>
     filesRe = new RegExp "(Cakefile|.*\.#{@coffee.suffix})$"
@@ -151,11 +206,11 @@ class Style
         Utils.find dirs, filesRe, (err, dirFiles) ->
           cb err, dirFiles
 
-      runLint: ["searchDirs", (cb, results) ->
+      runLint: ["searchDirs", (cb, results) =>
         dirFiles = results?.searchDirs ? []
         args = [config, files, dirFiles].reduce (x, y) -> x.concat y
 
-        Utils.spawn "coffeelint", args, (code) ->
+        Utils.spawn "#{@coffee.bin}", args, (code) ->
           err = if code is 0 then null else new Error "coffeelint failed"
           cb err
       ]
@@ -166,5 +221,6 @@ class Style
       callback err
 
 module.exports =
-  utils: Utils
-  Style: Style
+  utils:        Utils
+  CoffeeBuild:  CoffeeBuild
+  Style:        Style
