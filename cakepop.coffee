@@ -170,6 +170,8 @@ class CoffeeBuild
 
   # Build CoffeeScript to JS with constant watching.
   #
+  # **Note**: Takes over a terminal window until stopped (e.g., ctrl-c).
+  #
   # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
   #                                   Use string for files and object for
   #                                   for source/dest directories.
