@@ -114,9 +114,9 @@ class Style
   # Options are in the following (default) format:
   #
   #   coffee:
-  #     bin:    "coffeelint"  // CoffeeScript binary path / name (if in PATH)
-  #     suffix: "coffee"      // File suffix to match.
-  #     config: null          // Or "path/to/config.json"
+  #     bin:    "coffeelint"
+  #     suffix: "coffee"
+  #     config: null
   #
   # @param  [Object]      opts          Options.
   # @option opts [String] coffee.bin    coffeeelint binary path.

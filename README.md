@@ -11,9 +11,6 @@ the future.
 
 Roadmap
 =======
-* Switch to real object instances for things that take configurations.
-  (E.g., coffeescript)
-* Switch all callback signatures to (err, results)-form.
 * Add documentation.
 * Generate to JavaScript.
 * Tasks / Helpers:
