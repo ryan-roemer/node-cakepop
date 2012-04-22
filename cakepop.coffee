@@ -20,6 +20,15 @@ colors.setTheme
   debug:    'blue'
   error:    'red'
 
+# Static utility methods.
+#
+# Can be used directly (not instance methods).
+#
+# @example Cakefile usage
+#   utils = require("cakepop").utils
+#   task "hello", "Print Hello World!", ->
+#     utils.print "Hello World!"
+#
 class Utils
 
   # Log to console if non-empty string.
@@ -106,6 +115,18 @@ class Utils
 
       callback err, files
 
+# CoffeeScript build utilities.
+#
+# Instance methods (instantiate a class with optional configurations.)
+#
+# @example Cakefile usage
+#   builder = new (require("cakepop").CoffeeBuild)()
+#   task "source:build", "Build CoffeeScript to JavaScript.", ->
+#     builder.build [
+#       "foo.coffee"
+#       { "src": "dest" }
+#     ]
+#
 class CoffeeBuild
 
   # Constructor.
@@ -162,6 +183,9 @@ class CoffeeBuild
   # **Note**: The `paths` parameter takes an array of either string source
   # files or object source / destination object pairs.
   #
+  # **Note**: The `coffee` binary must be installed separately and available
+  # to a shell invocation.
+  #
   # @example paths
   #   paths = [
   #     "foo.coffee",
@@ -182,10 +206,13 @@ class CoffeeBuild
   # **Note**: The `paths` parameter takes an array of either string source
   # files or object source / destination object pairs.
   #
+  # **Note**: The `coffee` binary must be installed separately and available
+  # to a shell invocation.
+  #
   # @example paths
   #   paths = [
   #     "foo.coffee",
-  #     { "src": "lib" },
+  #     { "src_dir": "lib_dir" },
   #     "bar.coffee"
   #   ]
   #
@@ -195,6 +222,18 @@ class CoffeeBuild
   watch: (paths = [], callback = Utils.printCallback) =>
     @_build paths, true, callback
 
+# Style / static checker utilities.
+#
+# Instance methods (instantiate a class with optional configurations.)
+#
+# @example Cakefile usage
+#   style = new (require("cakepop").Style)()
+#   task "dev:coffeelint", "Run CoffeeScript style checks.", ->
+#     style.coffeelint SOURCE [
+#       "foo.coffee"
+#       "src_dir"
+#     ]
+#
 class Style
 
   # Constructor.
@@ -221,6 +260,9 @@ class Style
     @coffee = extend defaults.coffee, (opts?.coffee ? {})
 
   # Run coffeelint on an array of files, directory paths.
+  #
+  # **Note**: The `coffeelint` binary must be installed separately and
+  # available to a shell invocation.
   #
   # @param  [Array<String>] paths     Array of file / directory paths.
   # @param  [Function]      callback  Callback on process end (printCallback).

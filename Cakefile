@@ -1,5 +1,4 @@
 async   = require "async"
-colors  = require "colors"
 
 cakepop = require "./cakepop.js"
 utils   = cakepop.utils
@@ -19,10 +18,10 @@ task "dev:prepublish", "Run everything to get ready for publish.", ->
   async.series [
     (cb) -> style.coffeelint SOURCE, cb
     (cb) -> builder.build BUILD, cb
-    (cb) -> cakepop.utils.exec "codo -r README.md -o doc cakepop.coffee", cb
+    (cb) -> utils.exec "codo -r README.md -o doc cakepop.coffee", cb
   ], (err) ->
     utils.fail err if err
-    utils.print "Done".info
+    utils.print "\nPrepublish finished successfully".info
 
 task "dev:coffeelint", "Run CoffeeScript style checks.", ->
   style.coffeelint SOURCE
