@@ -148,7 +148,11 @@
     CoffeeBuild.name = 'CoffeeBuild';
 
     function CoffeeBuild(opts) {
+      this.watch = __bind(this.watch, this);
+
       this.build = __bind(this.build, this);
+
+      this._build = __bind(this._build, this);
 
       var defaults, _ref;
       defaults = {
@@ -160,15 +164,9 @@
       this.coffee = extend(defaults.coffee, (_ref = opts != null ? opts.coffee : void 0) != null ? _ref : {});
     }
 
-    CoffeeBuild.prototype.build = function(paths, callback) {
-      var build, buildDir, cbs, dirs, files, p,
+    CoffeeBuild.prototype._build = function(paths, watch, callback) {
+      var argsBase, build, buildDir, cbs, dirs, files, p,
         _this = this;
-      if (paths == null) {
-        paths = [];
-      }
-      if (callback == null) {
-        callback = Utils.printCallback;
-      }
       files = (function() {
         var _i, _len, _results;
         _results = [];
@@ -191,8 +189,9 @@
         }
         return _results;
       })();
+      argsBase = watch ? ["--watch"] : [];
       build = function(args, cb) {
-        return Utils.spawn("" + _this.coffee.bin, args, function(code) {
+        return Utils.spawn("" + _this.coffee.bin, argsBase.concat(args), function(code) {
           var err;
           err = code === 0 ? null : new Error("build failed");
           return cb(err);
@@ -212,12 +211,32 @@
           return build(["--compile"].concat(files), cb);
         },
         buildDirs: function(cb) {
-          return async.forEachSeries(dirs, buildDir, cb);
+          return async.forEach(dirs, buildDir, cb);
         }
       };
-      return async.series(cbs, function(err) {
+      return async.parallel(cbs, function(err) {
         return callback(err);
       });
+    };
+
+    CoffeeBuild.prototype.build = function(paths, callback) {
+      if (paths == null) {
+        paths = [];
+      }
+      if (callback == null) {
+        callback = Utils.printCallback;
+      }
+      return this._build(paths, false, callback);
+    };
+
+    CoffeeBuild.prototype.watch = function(paths, callback) {
+      if (paths == null) {
+        paths = [];
+      }
+      if (callback == null) {
+        callback = Utils.printCallback;
+      }
+      return this._build(paths, true, callback);
     };
 
     return CoffeeBuild;

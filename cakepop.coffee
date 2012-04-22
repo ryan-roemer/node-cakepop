@@ -107,6 +107,7 @@ class Utils
 
       callback err, files
 
+
 class CoffeeBuild
 
   # Constructor.
@@ -129,19 +130,15 @@ class CoffeeBuild
 
     @coffee = extend defaults.coffee, (opts?.coffee ? {})
 
-  # Run coffeelint on an array of files, directory paths.
+  # Raw builder.
   #
-  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
-  #                                   Use string for files and object for
-  #                                   for source/dest directories.
-  # @param  [Function]      callback  Callback on process end (printCallback).
-  #
-  build: (paths = [], callback = Utils.printCallback) =>
-    files = (p for p in paths when typeof p is 'string')
-    dirs  = (p for p in paths when typeof p isnt 'string')
+  _build: (paths, watch, callback) =>
+    files     = (p for p in paths when typeof p is 'string')
+    dirs      = (p for p in paths when typeof p isnt 'string')
+    argsBase  = if watch then ["--watch"] else []
 
     build = (args, cb) =>
-      Utils.spawn "#{@coffee.bin}", args, (code) ->
+      Utils.spawn "#{@coffee.bin}", argsBase.concat(args), (code) ->
         err = if code is 0 then null else new Error "build failed"
         cb err
 
@@ -156,10 +153,30 @@ class CoffeeBuild
         build ["--compile"].concat(files), cb
 
       buildDirs: (cb) ->
-        async.forEachSeries dirs, buildDir, cb
+        async.forEach dirs, buildDir, cb
 
-    async.series cbs, (err) ->
+    async.parallel cbs, (err) ->
       callback err
+
+  # Build CoffeeScript to JS on an array of files, directory paths.
+  #
+  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
+  #                                   Use string for files and object for
+  #                                   for source/dest directories.
+  # @param  [Function]      callback  Callback on process end (printCallback).
+  #
+  build: (paths = [], callback = Utils.printCallback) =>
+    @_build paths, false, callback
+
+  # Build CoffeeScript to JS with constant watching.
+  #
+  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
+  #                                   Use string for files and object for
+  #                                   for source/dest directories.
+  # @param  [Function]      callback  Callback on process end (printCallback).
+  #
+  watch: (paths = [], callback = Utils.printCallback) =>
+    @_build paths, true, callback
 
 
 class Style
