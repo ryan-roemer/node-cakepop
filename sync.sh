@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SRC_DIR="../node-cakepop/doc"
+REPO="../node-cakepop"
+SRC_DIR="${REPO}/doc"
+HASH=`cd ${REPO} && git rev-parse HEAD`
 
 echo "Check no outstanding changes."
 git status | grep "nothing to commit"
@@ -22,3 +24,5 @@ rm -rf classes
 
 echo "Copy over new documentation."
 cp -rp "${SRC_DIR}//" .
+
+echo "Copied documentation for ${HASH}."
