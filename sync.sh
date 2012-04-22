@@ -3,11 +3,11 @@
 SRC_DIR="../node-cakepop/doc"
 
 echo "Check no outstanding changes."
-# git status | grep "nothing to commit"
-# if [[ $? -ne "0" ]]; then
-#   echo "Uncommitted changes."
-#   exit 1
-# fi
+git status | grep "nothing to commit"
+if [[ $? -ne "0" ]]; then
+  echo "Uncommitted changes."
+  exit 1
+fi
 
 echo "Check source destination exists."
 if [[ ! -d "$SRC_DIR" ]]; then
