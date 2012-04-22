@@ -12,9 +12,7 @@ the future.
 Roadmap
 =======
 * Add documentation.
-* Generate to JavaScript.
 * Tasks / Helpers:
-    * Watch CS and build to JS.
     * JsHint
 
 License

@@ -1,4 +1,4 @@
-cakepop = require "./cakepop.coffee"
+cakepop = require "./cakepop.js"
 style   = new cakepop.Style()
 builder = new cakepop.CoffeeBuild()
 
