@@ -5,6 +5,7 @@ child_proc  = require 'child_process'
 
 async       = require 'async'
 colors      = require 'colors'
+fileUtils   = require 'file-utils'
 
 # Colors configuration
 colors.setTheme
@@ -82,14 +83,19 @@ class Utils
   # Return list of files matching egrep pattern.
   #
   # @param [Array<String>]  dirs      Array of directories (default: ["./"]).
-  # @param [String]         pattern   Egrep pattern.
+  # @param [String]         pattern   RegExp or string.
   # @param [Function]       callback  Callback on process end (printCallback).
   #
   @find: (dirs = ["./"], pattern, callback = @printCallback) =>
     finder = (dir, cb) =>
-      @exec "find \"#{dir}\" -name \"#{pattern}\"", (err, files) ->
-        files = files?.split("\n") ? []
-        cb err, (f for f in files when f)
+      pattern = new RegExp pattern if typeof pattern is 'string'
+      paths   = []
+      filter  = (name, path) ->
+        paths.push path if pattern.test name
+        true
+
+      (new fileUtils.File dir).list filter, (err) ->
+        cb err, paths
 
     async.map dirs, finder, (err, results) =>
       # Merge arrays
@@ -121,7 +127,7 @@ class Style
     cbs =
       searchDirs: (cb) ->
         if dirs.length > 0
-          Utils.find dirs, "*.#{suffix}", (err, dirFiles) ->
+          Utils.find dirs, filesRe, (err, dirFiles) ->
             cb err, dirFiles
 
         else
