@@ -154,8 +154,10 @@ class Style
           cb null, []
 
       runLint: ["searchDirs", (cb, results) ->
-        dirFiles = results.searchDirs
-        args = files.concat(dirFiles).concat(config)
+        args = config
+          .concat(files)
+          .concat(results?.searchDirs ? [])
+
         Utils.spawn "coffeelint", args, (code) ->
           err = if code is 0 then null else new Error "coffeelint failed"
           cb err
