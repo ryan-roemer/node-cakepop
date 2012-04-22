@@ -145,18 +145,15 @@ class Style
 
     cbs =
       searchDirs: (cb) ->
-        if dirs.length > 0
-          Utils.find dirs, filesRe, (err, dirFiles) ->
-            cb err, dirFiles
+        # No directories to search.
+        return cb null, [] if dirs.length < 1
 
-        else
-          # No directories to search.
-          cb null, []
+        Utils.find dirs, filesRe, (err, dirFiles) ->
+          cb err, dirFiles
 
       runLint: ["searchDirs", (cb, results) ->
-        args = config
-          .concat(files)
-          .concat(results?.searchDirs ? [])
+        dirFiles = results?.searchDirs ? []
+        args = [config, files, dirFiles].reduce (x, y) -> x.concat y
 
         Utils.spawn "coffeelint", args, (code) ->
           err = if code is 0 then null else new Error "coffeelint failed"
