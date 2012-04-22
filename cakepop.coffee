@@ -138,12 +138,10 @@ class Style
   # @param  [Function]        callback  Callback on process end (printCallback).
   #
   coffeelint: (paths = [], callback = Utils.printCallback) =>
-    filesRe = new RegExp ".*\.#{@coffee.suffix}$"
-    isCs    = (name) -> name is "Cakefile" or filesRe.test name
-
+    filesRe = new RegExp "(Cakefile|.*\.#{@coffee.suffix})$"
     config  = if @coffee.config then ["--file", @coffee.config] else []
-    files   = (f for f in paths when isCs f)
-    dirs    = (f for f in paths when not isCs f)
+    files   = (f for f in paths when filesRe.test f)
+    dirs    = (f for f in paths when not filesRe.test f)
 
     cbs =
       searchDirs: (cb) ->
