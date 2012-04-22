@@ -8,10 +8,12 @@ Notwithstanding it's CoffeeScript-friendliness, CakePop runs off of real
 JavaScript without CoffeeScript dependencies, and is thus appropriate for
 use in pure JavaScript code (e.g., with Jakefiles).
 
+[api]: http://ryan-roemer.github.com/node-cakepop
 [cakepop]: https://github.com/ryan-roemer/node-cakepop
 [cakefile]: https://github.com/ryan-roemer/node-cakepop/blob/master/Cakefile
 
-See CakePop's own [`Cakefile`][cakefile] for example usage.
+See the [API documenation][api] for full information, or CakePop's own
+[`Cakefile`][cakefile] for some example usage.
 
 Documentation is presently in source comments in `cakepop.coffee`. While not
 ideal, the source is quite readable. There will be a more friendly version in
