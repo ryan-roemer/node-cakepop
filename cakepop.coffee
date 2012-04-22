@@ -111,7 +111,7 @@ class CoffeeBuild
   # Constructor.
   #
   # Options are in the following (default) format:
-  #
+  # @example
   #   coffee:
   #     bin:    "coffee"
   #     suffix: "coffee"
@@ -200,14 +200,14 @@ class Style
   # Constructor.
   #
   # Options are in the following (default) format:
-  #
+  # @example
   #   coffee:
   #     bin:    "coffeelint"
   #     suffix: "coffee"
   #     config: null
   #
   # @param  [Object]      opts          Options.
-  # @option opts [String] coffee.bin    coffeeelint binary path.
+  # @option opts [String] coffee.bin    coffeelint binary path.
   # @option opts [String] coffee.suffix CoffeeScript file suffix.
   # @option opts [String] coffee.config Path to coffeelint config file.
   #
