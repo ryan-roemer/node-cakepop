@@ -29,12 +29,13 @@ class Utils
     data = (data ? "").toString().replace /[\r\n]+$/, ""
     console.log data if data
 
-  # Print "done" or error.
+  # Print error of data message.
   #
-  # @param [Object] err Error.
+  # @param [Object] err   Error.
+  # @param [String] data  String to print.
   #
-  @printOnError: (err) =>
-    @print err ? "Done."
+  @printCallback: (err, data) =>
+    @print err ? (data ? "Done.").toString()
 
   # Log failure and exit process.
   #
@@ -59,47 +60,44 @@ class Utils
 
   # Exec with log hooks to stdout, stderr.
   #
-  # @param [String]         cmd       Command and arguments.
-  # @param [Function]       callback  Callback on process end (default: print).
+  # @param [String]   cmd       Command and arguments.
+  # @param [Function] callback  Callback on process end (printCallback).
   #
-  @exec: (cmd, callback = @print) =>
+  @exec: (cmd, callback = @printCallback) =>
     @print cmd
     child_proc.exec cmd, (error, stdout, stderr) ->
       process.stderr.write stderr if stderr
-      callback stdout.toString()
+      callback error, stdout.toString()
 
   # Return list of process id's matching egrep pattern.
   #
   # @param [String]   pattern   Egrep pattern.
-  # @param [Function] callback  Callback on process end (default: print).
+  # @param [Function] callback  Callback on process end (printCallback).
   #
   @pids: (pattern, callback = @print) =>
-    @exec "ps ax | egrep \"#{pattern}\" | egrep -v egrep", (matches) ->
+    @exec "ps ax | egrep \"#{pattern}\" | egrep -v egrep", (err, matches) ->
       matches = matches?.split("\n") ? []
-      callback (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
+      callback err, (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
 
   # Return list of files matching egrep pattern.
   #
   # @param [Array<String>]  dirs      Array of directories (default: ["./"]).
   # @param [String]         pattern   Egrep pattern.
-  # @param [Function]       callback  Callback on process end (default: print).
+  # @param [Function]       callback  Callback on process end (printCallback).
   #
-  @find: (dirs = ["./"], pattern, callback = @print) =>
+  @find: (dirs = ["./"], pattern, callback = @printCallback) =>
     finder = (dir, cb) =>
-      @exec "find \"#{dir}\" -name \"#{pattern}\"", (files) ->
+      @exec "find \"#{dir}\" -name \"#{pattern}\"", (err, files) ->
         files = files?.split("\n") ? []
-        cb null, (f for f in files when f)
+        cb err, (f for f in files when f)
 
     async.map dirs, finder, (err, results) =>
-      @fail err if err
-
       # Merge arrays
       files = []
       if not err
-        for collection in results
-          files = files.concat collection
+        files = files.concat r for r in results
 
-      callback files
+      callback err, files
 
 class Style
 
@@ -109,9 +107,9 @@ class Style
   # @param  [Object]          opts      Options.
   # @option options [String]  suffix    CoffeeScript file suffix ("coffee").
   # @option options [String]  config    Path to coffeelint config file.
-  # @param  [Function]        callback  Callback on process end (or null).
+  # @param  [Function]        callback  Callback on process end (printCallback).
   #
-  @coffeelint: (paths = [], opts = {}, callback = Utils.printOnError) ->
+  @coffeelint: (paths = [], opts = {}, callback = Utils.printCallback) ->
     suffix  = opts.suffix ? "coffee"
     filesRe = new RegExp ".*\.#{suffix}$"
     isCs    = (name) -> name is "Cakefile" or filesRe.test name
@@ -123,8 +121,8 @@ class Style
     cbs =
       searchDirs: (cb) ->
         if dirs.length > 0
-          Utils.find dirs, "*.#{suffix}", (dirFiles) ->
-            cb null, dirFiles
+          Utils.find dirs, "*.#{suffix}", (err, dirFiles) ->
+            cb err, dirFiles
 
         else
           # No directories to search.
@@ -135,12 +133,13 @@ class Style
         args = files.concat(dirFiles).concat(config)
         Utils.spawn "coffeelint", args, (code) =>
           err = if code is 0 then null else new Error "coffeelint failed"
+          cb err
       ]
 
     async.auto cbs, (err) ->
       Utils.fail   "CoffeeScript style checks failed." if err
       Utils.print  "CoffeeScript style checks passed.\n".info
-      callback()
+      callback err if callback
 
 module.exports =
   utils: Utils
