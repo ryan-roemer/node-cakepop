@@ -107,7 +107,6 @@ class Utils
 
       callback err, files
 
-
 class CoffeeBuild
 
   # Constructor.
@@ -179,7 +178,6 @@ class CoffeeBuild
   #
   watch: (paths = [], callback = Utils.printCallback) =>
     @_build paths, true, callback
-
 
 class Style
 
