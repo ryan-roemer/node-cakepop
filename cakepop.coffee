@@ -124,7 +124,7 @@ class Utils
 #   task "source:build", "Build CoffeeScript to JavaScript.", ->
 #     builder.build [
 #       "foo.coffee"
-#       { "src": "dest" }
+#       { "src_dir": "lib_dir" }
 #     ]
 #
 class CoffeeBuild
@@ -188,8 +188,8 @@ class CoffeeBuild
   #
   # @example paths
   #   paths = [
-  #     "foo.coffee",
-  #     { "src": "lib" },
+  #     "foo.coffee"
+  #     { "src_dir": "lib_dir" }
   #     "bar.coffee"
   #   ]
   #
@@ -211,8 +211,8 @@ class CoffeeBuild
   #
   # @example paths
   #   paths = [
-  #     "foo.coffee",
-  #     { "src_dir": "lib_dir" },
+  #     "foo.coffee"
+  #     { "src_dir": "lib_dir" }
   #     "bar.coffee"
   #   ]
   #

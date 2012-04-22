@@ -36,9 +36,34 @@ following:
 * CoffeeScript Build Tasks: `npm install coffee-script`
 * Coffeelint: `npm install coffeelint`
 
+Basic Usage
+===========
+Here are some common `Cakefile` tasks that CakePop can help with.
+
+Exec / spawn a bash process:
+
+    utils = require("cakepop").utils
+
+    task "hello1", "Exec 'hello world'", ->
+      utils.exec "echo Hello World"
+
+    task "hello2", "Spawn 'hello world'", ->
+      utils.spawn "echo", ["Hello World"]
+
+Build CoffeeScript files to JavaScript:
+
+    builder = new (require("cakepop").CoffeeBuild)()
+
+    task "source:build", "Build CoffeeScript to JavaScript.", ->
+      builder.build [
+        "foo.coffee"
+        { "src_dir": "dest_dir" }
+      ]
+
+See the API documentation for more.
+
 Roadmap
 =======
-* Add documentation and `gh-pages` branch.
 * Tasks / Helpers:
     * JsHint
 
