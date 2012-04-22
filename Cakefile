@@ -14,8 +14,11 @@ BUILD = [
 task "dev:coffeelint", "Run CoffeeScript style checks.", ->
   style.coffeelint SOURCE
 
-task "dev:build", "Build CoffeeScript to JavaScript.", ->
+task "source:build", "Build CoffeeScript to JavaScript.", ->
   builder.build BUILD
 
-task "dev:watch", "Watch (build) CoffeeScript to JavaScript.", ->
+task "source:watch", "Watch (build) CoffeeScript to JavaScript.", ->
   builder.watch BUILD
+
+task "docs:build", "Build CoffeeScript to JavaScript.", ->
+  cakepop.utils.exec "codo -r README.md -o doc cakepop.coffee"

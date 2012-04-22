@@ -12,6 +12,7 @@ node_modules
 npm-debug\.log
 logs
 
+doc
 lib-cov
 build
 

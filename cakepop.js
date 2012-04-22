@@ -82,7 +82,7 @@
 
     Utils.pids = function(pattern, callback) {
       if (callback == null) {
-        callback = Utils.print;
+        callback = Utils.printCallback;
       }
       return Utils.exec("ps ax | egrep \"" + pattern + "\" | egrep -v egrep", function(err, matches) {
         var m, _ref;

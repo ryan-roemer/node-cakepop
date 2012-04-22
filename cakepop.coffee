@@ -1,6 +1,5 @@
-####
 # CakePop!
-####
+#
 child_proc  = require 'child_process'
 
 async       = require 'async'
@@ -76,7 +75,7 @@ class Utils
   # @param [String]   pattern   Egrep pattern.
   # @param [Function] callback  Callback on process end (printCallback).
   #
-  @pids: (pattern, callback = @print) =>
+  @pids: (pattern, callback = @printCallback) =>
     @exec "ps ax | egrep \"#{pattern}\" | egrep -v egrep", (err, matches) ->
       matches = matches?.split("\n") ? []
       callback err, (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
@@ -130,6 +129,7 @@ class CoffeeBuild
     @coffee = extend defaults.coffee, (opts?.coffee ? {})
 
   # Raw builder.
+  # @private
   #
   _build: (paths, watch, callback) =>
     files     = (p for p in paths when typeof p is 'string')
@@ -159,10 +159,18 @@ class CoffeeBuild
 
   # Build CoffeeScript to JS on an array of files, directory paths.
   #
-  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
-  #                                   Use string for files and object for
-  #                                   for source/dest directories.
-  # @param  [Function]      callback  Callback on process end (printCallback).
+  # **Note**: The `paths` parameter takes an array of either string source
+  # files or object source / destination object pairs.
+  #
+  # @example paths
+  #   paths = [
+  #     "foo.coffee",
+  #     { "src": "lib" },
+  #     "bar.coffee"
+  #   ]
+  #
+  # @param  [Array<Object|String>] paths Array of file and source / dest dirs.
+  # @param  [Function] callback Callback on process end (printCallback).
   #
   build: (paths = [], callback = Utils.printCallback) =>
     @_build paths, false, callback
@@ -171,10 +179,18 @@ class CoffeeBuild
   #
   # **Note**: Takes over a terminal window until stopped (e.g., ctrl-c).
   #
-  # @param  [Array<Object>] paths     Array of file and source / dest dir pairs.
-  #                                   Use string for files and object for
-  #                                   for source/dest directories.
-  # @param  [Function]      callback  Callback on process end (printCallback).
+  # **Note**: The `paths` parameter takes an array of either string source
+  # files or object source / destination object pairs.
+  #
+  # @example paths
+  #   paths = [
+  #     "foo.coffee",
+  #     { "src": "lib" },
+  #     "bar.coffee"
+  #   ]
+  #
+  # @param  [Array<Object|String>] paths Array of file and source / dest dirs.
+  # @param  [Function] callback Callback on process end (printCallback).
   #
   watch: (paths = [], callback = Utils.printCallback) =>
     @_build paths, true, callback
