@@ -248,38 +248,39 @@
     Style.name = 'Style';
 
     function Style(opts) {
-      this.coffeelint = __bind(this.coffeelint, this);
-
       this.jshint = __bind(this.jshint, this);
+
+      this.coffeelint = __bind(this.coffeelint, this);
 
       var defaults, _ref, _ref1;
       defaults = {
         coffee: {
           bin: "coffeelint",
           suffix: "coffee",
-          config: null
+          config: null,
+          configOpt: "--file",
+          type: "CoffeeScript",
+          filesPat: ["Cakefile"]
         },
         js: {
           bin: "jshint",
           suffix: "js",
-          config: null
+          config: null,
+          configOpt: "--config",
+          type: "JavaScript",
+          filesPat: []
         }
       };
       this.coffee = extend(defaults.coffee, (_ref = opts != null ? opts.coffee : void 0) != null ? _ref : {});
       this.js = extend(defaults.js, (_ref1 = opts != null ? opts.js : void 0) != null ? _ref1 : {});
     }
 
-    Style.prototype.jshint = function(paths, callback) {
-      var cbs, config, dirs, f, files, filesRe,
+    Style.prototype._lint = function(paths, cfg, callback) {
+      var cbs, config, dirs, f, files, filesRe, pattern,
         _this = this;
-      if (paths == null) {
-        paths = [];
-      }
-      if (callback == null) {
-        callback = Utils.printCallback;
-      }
-      filesRe = new RegExp(".*\\." + this.js.suffix + "$");
-      config = this.js.config ? ["--config", this.js.config] : [];
+      pattern = cfg.filesPat.concat([".*\\." + cfg.suffix]).join("|");
+      filesRe = new RegExp("(" + pattern + ")$");
+      config = cfg.config ? [cfg.configOpt, cfg.config] : [];
       files = (function() {
         var _i, _len, _results;
         _results = [];
@@ -318,9 +319,9 @@
             args = [files, dirFiles, config].reduce(function(x, y) {
               return x.concat(y);
             });
-            return Utils.spawn("" + _this.js.bin, args, function(code) {
+            return Utils.spawn("" + cfg.bin, args, function(code) {
               var err;
-              err = code === 0 ? null : new Error("jshint failed");
+              err = code === 0 ? null : new Error("checks failed");
               return cb(err);
             });
           }
@@ -328,77 +329,31 @@
       };
       return async.auto(cbs, function(err) {
         if (err) {
-          Utils.fail("JavaScript style checks failed.");
+          Utils.fail("" + cfg.type + " style checks failed. (" + err + ")");
         }
-        Utils.print("JavaScript style checks passed.\n".info);
+        Utils.print(("" + cfg.type + " style checks passed.\n").info);
         return callback(err);
       });
     };
 
     Style.prototype.coffeelint = function(paths, callback) {
-      var cbs, config, dirs, f, files, filesRe,
-        _this = this;
       if (paths == null) {
         paths = [];
       }
       if (callback == null) {
         callback = Utils.printCallback;
       }
-      filesRe = new RegExp("(Cakefile|.*\\." + this.coffee.suffix + ")$");
-      config = this.coffee.config ? ["--file", this.coffee.config] : [];
-      files = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = paths.length; _i < _len; _i++) {
-          f = paths[_i];
-          if (filesRe.test(f)) {
-            _results.push(f);
-          }
-        }
-        return _results;
-      })();
-      dirs = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = paths.length; _i < _len; _i++) {
-          f = paths[_i];
-          if (!filesRe.test(f)) {
-            _results.push(f);
-          }
-        }
-        return _results;
-      })();
-      cbs = {
-        searchDirs: function(cb) {
-          if (dirs.length < 1) {
-            return cb(null, []);
-          }
-          return Utils.find(dirs, filesRe, function(err, dirFiles) {
-            return cb(err, dirFiles);
-          });
-        },
-        runLint: [
-          "searchDirs", function(cb, results) {
-            var args, dirFiles, _ref;
-            dirFiles = (_ref = results != null ? results.searchDirs : void 0) != null ? _ref : [];
-            args = [config, files, dirFiles].reduce(function(x, y) {
-              return x.concat(y);
-            });
-            return Utils.spawn("" + _this.coffee.bin, args, function(code) {
-              var err;
-              err = code === 0 ? null : new Error("coffeelint failed");
-              return cb(err);
-            });
-          }
-        ]
-      };
-      return async.auto(cbs, function(err) {
-        if (err) {
-          Utils.fail("CoffeeScript style checks failed.");
-        }
-        Utils.print("CoffeeScript style checks passed.\n".info);
-        return callback(err);
-      });
+      return this._lint(paths, this.coffee, callback);
+    };
+
+    Style.prototype.jshint = function(paths, callback) {
+      if (paths == null) {
+        paths = [];
+      }
+      if (callback == null) {
+        callback = Utils.printCallback;
+      }
+      return this._lint(paths, this.js, callback);
     };
 
     return Style;

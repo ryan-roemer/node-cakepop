@@ -260,28 +260,29 @@ class Style
   constructor: (opts) ->
     defaults =
       coffee:
-        bin:    "coffeelint"
-        suffix: "coffee"
-        config: null
+        bin:        "coffeelint"
+        suffix:     "coffee"
+        config:     null
+        configOpt:  "--file"
+        type:       "CoffeeScript"
+        filesPat:   ["Cakefile"]
       js:
-        bin:    "jshint"
-        suffix: "js"
-        config: null
+        bin:        "jshint"
+        suffix:     "js"
+        config:     null
+        configOpt:  "--config"
+        type:       "JavaScript"
+        filesPat:   []
 
     @coffee = extend defaults.coffee, (opts?.coffee ? {})
     @js     = extend defaults.js,     (opts?.js ? {})
 
-  # Run jshint on an array of files, directory paths.
+  # @private
   #
-  # **Note**: The `jshint` binary must be installed separately and
-  # available to a shell invocation.
-  #
-  # @param  [Array<String>] paths     Array of file / directory paths.
-  # @param  [Function]      callback  Callback on process end (printCallback).
-  #
-  jshint: (paths = [], callback = Utils.printCallback) =>
-    filesRe = new RegExp ".*\\.#{@js.suffix}$"
-    config  = if @js.config then ["--config", @js.config] else []
+  _lint: (paths, cfg, callback) ->
+    pattern = cfg.filesPat.concat([".*\\.#{cfg.suffix}"]).join "|"
+    filesRe = new RegExp "(#{pattern})$"
+    config  = if cfg.config then [cfg.configOpt, cfg.config] else []
     files   = (f for f in paths when filesRe.test f)
     dirs    = (f for f in paths when not filesRe.test f)
 
@@ -297,14 +298,14 @@ class Style
         dirFiles = results?.searchDirs ? []
         args = [files, dirFiles, config].reduce (x, y) -> x.concat y
 
-        Utils.spawn "#{@js.bin}", args, (code) ->
-          err = if code is 0 then null else new Error "jshint failed"
+        Utils.spawn "#{cfg.bin}", args, (code) ->
+          err = if code is 0 then null else new Error "checks failed"
           cb err
       ]
 
     async.auto cbs, (err) ->
-      Utils.fail   "JavaScript style checks failed." if err
-      Utils.print  "JavaScript style checks passed.\n".info
+      Utils.fail   "#{cfg.type} style checks failed. (#{err})" if err
+      Utils.print  "#{cfg.type} style checks passed.\n".info
       callback err
 
   # Run coffeelint on an array of files, directory paths.
@@ -316,32 +317,18 @@ class Style
   # @param  [Function]      callback  Callback on process end (printCallback).
   #
   coffeelint: (paths = [], callback = Utils.printCallback) =>
-    filesRe = new RegExp "(Cakefile|.*\\.#{@coffee.suffix})$"
-    config  = if @coffee.config then ["--file", @coffee.config] else []
-    files   = (f for f in paths when filesRe.test f)
-    dirs    = (f for f in paths when not filesRe.test f)
+    @_lint paths, @coffee, callback
 
-    cbs =
-      searchDirs: (cb) ->
-        # No directories to search.
-        return cb null, [] if dirs.length < 1
-
-        Utils.find dirs, filesRe, (err, dirFiles) ->
-          cb err, dirFiles
-
-      runLint: ["searchDirs", (cb, results) =>
-        dirFiles = results?.searchDirs ? []
-        args = [config, files, dirFiles].reduce (x, y) -> x.concat y
-
-        Utils.spawn "#{@coffee.bin}", args, (code) ->
-          err = if code is 0 then null else new Error "coffeelint failed"
-          cb err
-      ]
-
-    async.auto cbs, (err) ->
-      Utils.fail   "CoffeeScript style checks failed." if err
-      Utils.print  "CoffeeScript style checks passed.\n".info
-      callback err
+  # Run jshint on an array of files, directory paths.
+  #
+  # **Note**: The `jshint` binary must be installed separately and
+  # available to a shell invocation.
+  #
+  # @param  [Array<String>] paths     Array of file / directory paths.
+  # @param  [Function]      callback  Callback on process end (printCallback).
+  #
+  jshint: (paths = [], callback = Utils.printCallback) =>
+    @_lint paths, @js, callback
 
 module.exports =
   utils:        Utils
