@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>CakePop v0.0.6</title>
+  <title>CakePop v0.0.7</title>
   <link rel='stylesheet' href='../assets/codo.css' type='text/css'>
   <script src='../assets/codo.js'></script>
   <script src='../assets/search_data.js'></script>
@@ -149,6 +149,17 @@ task &quot;dev:coffeelint&quot;, &quot;Run CoffeeScript style checks.&quot;, -&g
       Run coffeelint on an array of files, directory paths.
     </span>
   </li>
+  <li>
+    <span class='signature'>
+      <a href='#jshint-instance'>
+        - (void) <strong>jshint</strong>(paths = [], callback = Utils.printCallback)
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+      Run jshint on an array of files, directory paths.
+    </span>
+  </li>
 </ul>
       <h2>Constructor Details</h2>
       <div class='methods'>
@@ -166,6 +177,10 @@ task &quot;dev:coffeelint&quot;, &quot;Run CoffeeScript style checks.&quot;, -&g
     <pre><code class='coffee'>coffee:
   bin:    &quot;coffeelint&quot;
   suffix: &quot;coffee&quot;
+  config: null
+js:
+  bin:    &quot;jshint&quot;
+  suffix: &quot;js&quot;
   config: null</code></pre>
   </div>
 </div>
@@ -210,6 +225,30 @@ task &quot;dev:coffeelint&quot;, &quot;Run CoffeeScript style checks.&quot;, -&g
       &mdash;
       <span class='desc'>Path to coffeelint config file.</span>
     </li>
+    <li>
+      <span class='name'>js.bin</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>jshint binary path.</span>
+    </li>
+    <li>
+      <span class='name'>js.suffix</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>JavaScript file suffix.</span>
+    </li>
+    <li>
+      <span class='name'>js.config</span>
+      <span class='type'>
+        (<tt>String</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Path to jshint config file.</span>
+    </li>
   </ul>
 </div>
   </div>
@@ -246,11 +285,41 @@ task &quot;dev:coffeelint&quot;, &quot;Run CoffeeScript style checks.&quot;, -&g
   </ul>
 </div>
   </div>
+  <div class='method_details'>
+    <p class='signature' id='jshint-instance'>
+      - (void) <strong>jshint</strong>(paths = [], callback = Utils.printCallback)
+      (bound)
+    </p>
+    <div class='docstring'>
+  <p>Run jshint on an array of files, directory paths. </p> <p><strong>Note</strong>: The <code>jshint</code> binary must be installed separately and available to a shell invocation. </p> 
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>paths</span>
+      <span class='type'>
+        (<tt>Array<String></tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Array of file / directory paths.</span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (<tt>Function</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Callback on process end (printCallback).</span>
+    </li>
+  </ul>
+</div>
+  </div>
 </div>
     </div>
     <div id='footer'>
   Generated on
-  Mon Apr 23 2012 11:36:45 GMT-0400 (EDT)
+  Mon Apr 23 2012 19:38:55 GMT-0400 (EDT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.7.0
