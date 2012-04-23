@@ -250,16 +250,90 @@
     function Style(opts) {
       this.coffeelint = __bind(this.coffeelint, this);
 
-      var defaults, _ref;
+      this.jshint = __bind(this.jshint, this);
+
+      var defaults, _ref, _ref1;
       defaults = {
         coffee: {
           bin: "coffeelint",
           suffix: "coffee",
           config: null
+        },
+        js: {
+          bin: "jshint",
+          suffix: "js",
+          config: null
         }
       };
       this.coffee = extend(defaults.coffee, (_ref = opts != null ? opts.coffee : void 0) != null ? _ref : {});
+      this.js = extend(defaults.js, (_ref1 = opts != null ? opts.js : void 0) != null ? _ref1 : {});
     }
+
+    Style.prototype.jshint = function(paths, callback) {
+      var cbs, config, dirs, f, files, filesRe,
+        _this = this;
+      if (paths == null) {
+        paths = [];
+      }
+      if (callback == null) {
+        callback = Utils.printCallback;
+      }
+      filesRe = new RegExp(".*\\." + this.js.suffix + "$");
+      config = this.js.config ? ["--config", this.js.config] : [];
+      files = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = paths.length; _i < _len; _i++) {
+          f = paths[_i];
+          if (filesRe.test(f)) {
+            _results.push(f);
+          }
+        }
+        return _results;
+      })();
+      dirs = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = paths.length; _i < _len; _i++) {
+          f = paths[_i];
+          if (!filesRe.test(f)) {
+            _results.push(f);
+          }
+        }
+        return _results;
+      })();
+      cbs = {
+        searchDirs: function(cb) {
+          if (dirs.length < 1) {
+            return cb(null, []);
+          }
+          return Utils.find(dirs, filesRe, function(err, dirFiles) {
+            return cb(err, dirFiles);
+          });
+        },
+        runLint: [
+          "searchDirs", function(cb, results) {
+            var args, dirFiles, _ref;
+            dirFiles = (_ref = results != null ? results.searchDirs : void 0) != null ? _ref : [];
+            args = [files, dirFiles, config].reduce(function(x, y) {
+              return x.concat(y);
+            });
+            return Utils.spawn("" + _this.js.bin, args, function(code) {
+              var err;
+              err = code === 0 ? null : new Error("jshint failed");
+              return cb(err);
+            });
+          }
+        ]
+      };
+      return async.auto(cbs, function(err) {
+        if (err) {
+          Utils.fail("JavaScript style checks failed.");
+        }
+        Utils.print("JavaScript style checks passed.\n".info);
+        return callback(err);
+      });
+    };
 
     Style.prototype.coffeelint = function(paths, callback) {
       var cbs, config, dirs, f, files, filesRe,
@@ -270,7 +344,7 @@
       if (callback == null) {
         callback = Utils.printCallback;
       }
-      filesRe = new RegExp("(Cakefile|.*\." + this.coffee.suffix + ")$");
+      filesRe = new RegExp("(Cakefile|.*\\." + this.coffee.suffix + ")$");
       config = this.coffee.config ? ["--file", this.coffee.config] : [];
       files = (function() {
         var _i, _len, _results;

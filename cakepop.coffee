@@ -244,11 +244,18 @@ class Style
   #     bin:    "coffeelint"
   #     suffix: "coffee"
   #     config: null
+  #   js:
+  #     bin:    "jshint"
+  #     suffix: "js"
+  #     config: null
   #
   # @param  [Object]      opts          Options.
   # @option opts [String] coffee.bin    coffeelint binary path.
   # @option opts [String] coffee.suffix CoffeeScript file suffix.
   # @option opts [String] coffee.config Path to coffeelint config file.
+  # @option opts [String] js.bin        jshint binary path.
+  # @option opts [String] js.suffix     JavaScript file suffix.
+  # @option opts [String] js.config     Path to jshint config file.
   #
   constructor: (opts) ->
     defaults =
@@ -256,8 +263,49 @@ class Style
         bin:    "coffeelint"
         suffix: "coffee"
         config: null
+      js:
+        bin:    "jshint"
+        suffix: "js"
+        config: null
 
     @coffee = extend defaults.coffee, (opts?.coffee ? {})
+    @js     = extend defaults.js,     (opts?.js ? {})
+
+  # Run jshint on an array of files, directory paths.
+  #
+  # **Note**: The `jshint` binary must be installed separately and
+  # available to a shell invocation.
+  #
+  # @param  [Array<String>] paths     Array of file / directory paths.
+  # @param  [Function]      callback  Callback on process end (printCallback).
+  #
+  jshint: (paths = [], callback = Utils.printCallback) =>
+    filesRe = new RegExp ".*\\.#{@js.suffix}$"
+    config  = if @js.config then ["--config", @js.config] else []
+    files   = (f for f in paths when filesRe.test f)
+    dirs    = (f for f in paths when not filesRe.test f)
+
+    cbs =
+      searchDirs: (cb) ->
+        # No directories to search.
+        return cb null, [] if dirs.length < 1
+
+        Utils.find dirs, filesRe, (err, dirFiles) ->
+          cb err, dirFiles
+
+      runLint: ["searchDirs", (cb, results) =>
+        dirFiles = results?.searchDirs ? []
+        args = [files, dirFiles, config].reduce (x, y) -> x.concat y
+
+        Utils.spawn "#{@js.bin}", args, (code) ->
+          err = if code is 0 then null else new Error "jshint failed"
+          cb err
+      ]
+
+    async.auto cbs, (err) ->
+      Utils.fail   "JavaScript style checks failed." if err
+      Utils.print  "JavaScript style checks passed.\n".info
+      callback err
 
   # Run coffeelint on an array of files, directory paths.
   #
@@ -268,7 +316,7 @@ class Style
   # @param  [Function]      callback  Callback on process end (printCallback).
   #
   coffeelint: (paths = [], callback = Utils.printCallback) =>
-    filesRe = new RegExp "(Cakefile|.*\.#{@coffee.suffix})$"
+    filesRe = new RegExp "(Cakefile|.*\\.#{@coffee.suffix})$"
     config  = if @coffee.config then ["--file", @coffee.config] else []
     files   = (f for f in paths when filesRe.test f)
     dirs    = (f for f in paths when not filesRe.test f)

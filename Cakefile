@@ -3,12 +3,18 @@ async   = require "async"
 cakepop = require "./cakepop.js"
 pkg     = require "./package.json"
 utils   = cakepop.utils
-style   = new cakepop.Style()
 builder = new cakepop.CoffeeBuild()
+style   = new cakepop.Style
+  js:
+    config: "dev/jshint.json"
 
-SOURCE = [
+CS_SOURCE = [
   "Cakefile"
   "cakepop.coffee"
+]
+
+JS_SOURCE = [
+  "cakepop.js"
 ]
 
 BUILD = [
@@ -23,17 +29,21 @@ codo = (cb) ->
                    cakepop.coffee -
                    HISTORY.md", cb
 
-task "dev:prepublish", "Run everything to get ready for publish.", ->
+task "prepublish", "Run everything to get ready for publish.", ->
   async.series [
-    (cb) -> style.coffeelint SOURCE, cb
+    (cb) -> style.coffeelint CS_SOURCE, cb
     (cb) -> builder.build BUILD, cb
+    (cb) -> style.jshint JS_SOURCE, cb
     (cb) -> codo cb
   ], (err) ->
     utils.fail err if err
     utils.print "\nPrepublish finished successfully".info
 
 task "dev:coffeelint", "Run CoffeeScript style checks.", ->
-  style.coffeelint SOURCE
+  style.coffeelint CS_SOURCE
+
+task "dev:jshint", "Run JavaScript style checks.", ->
+  style.jshint JS_SOURCE
 
 task "source:build", "Build CoffeeScript to JavaScript.", ->
   builder.build BUILD
