@@ -17,7 +17,11 @@ BUILD = [
 
 codo = (cb) ->
   title = "CakePop v#{pkg.version}"
-  utils.exec "codo -r README.md -o doc --title '#{title}' cakepop.coffee", cb
+  utils.exec "codo -r README.md
+                   -o doc
+                   --title '#{title}'
+                   cakepop.coffee -
+                   HISTORY.md", cb
 
 task "dev:prepublish", "Run everything to get ready for publish.", ->
   async.series [
