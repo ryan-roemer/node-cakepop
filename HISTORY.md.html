@@ -12,7 +12,7 @@
   <div id='menu'>
     <a href='class_index.html' title='Index'>Index</a>
     &raquo;
-    <span class='title'>README.md</span>
+    <span class='title'>HISTORY.md</span>
     <nav>
       <ul>
         <li class='noframes'>
@@ -108,85 +108,7 @@
         </p>
       </nav>
       <div id='filecontents'>
-        <h1>CakePop!</h1>
-<p><a href="https://github.com/ryan-roemer/node-cakepop">CakePop</a> is a set of Node.js build helpers and CoffeeScript Cake
-extensions. It provides various utility wrappers for bash shell commands and
-other Node.js binary process executions.
-
-</p>
-<p>Notwithstanding it&#39;s CoffeeScript-friendliness, CakePop runs off of real
-JavaScript without CoffeeScript dependencies, and is thus appropriate for
-use in pure JavaScript code (e.g., with Jakefiles).
-
-</p>
-<p>See the <a href="http://ryan-roemer.github.com/node-cakepop">API documenation</a> for full information, or CakePop&#39;s own
-<a href="https://github.com/ryan-roemer/node-cakepop/blob/master/Cakefile"><code>Cakefile</code></a> for some example usage.
-
-</p>
-<p>Documentation is presently in source comments in <code>cakepop.coffee</code>. While not
-ideal, the source is quite readable. There will be a more friendly version in
-the future.
-
-</p>
-<p><strong>Warning</strong>: The library is currently undergoing a lot of restructuing and
-change, so expect the API to drastically change until things settle down.
-Breaking changes will be versioned (with git tags and in NPM), but that&#39;s
-about it for now.
-
-</p>
-<h1>Installation</h1>
-<p>To get the library:
-
-</p>
-<pre><code>$ npm install cakepop</code></pre>
-<p>CakePop does <strong>not</strong> install dependencies for tasks that are shell-invoked,
-to keep the library small and let the user install the proper version of a
-library (like <code>coffeelint</code>). So, you will need manual installations for the
-following:
-
-</p>
-<ul>
-<li>CoffeeScript Build Tasks: <code>npm install coffee-script</code></li>
-<li>Coffeelint: <code>npm install coffeelint</code></li>
-</ul>
-<h1>Basic Usage</h1>
-<p>Here are some common <code>Cakefile</code> tasks that CakePop can help with.
-
-</p>
-<p>Exec / spawn a bash process:
-
-</p>
-<pre><code>utils = require(&quot;cakepop&quot;).utils
-
-task &quot;hello1&quot;, &quot;Exec &#39;hello world&#39;&quot;, -&gt;
-  utils.exec &quot;echo Hello World&quot;
-
-task &quot;hello2&quot;, &quot;Spawn &#39;hello world&#39;&quot;, -&gt;
-  utils.spawn &quot;echo&quot;, [&quot;Hello World&quot;]</code></pre>
-<p>Build CoffeeScript files to JavaScript:
-
-</p>
-<pre><code>builder = new (require(&quot;cakepop&quot;).CoffeeBuild)()
-
-task &quot;source:build&quot;, &quot;Build CoffeeScript to JavaScript.&quot;, -&gt;
-  builder.build [
-    &quot;foo.coffee&quot;
-    { &quot;src_dir&quot;: &quot;dest_dir&quot; }
-  ]</code></pre>
-<p>See the API documentation for more.
-
-</p>
-<h1>Roadmap</h1>
-<ul>
-<li>Tasks / Helpers:<ul>
-<li>JsHint</li>
-</ul>
-</li>
-</ul>
-<h1>License</h1>
-<p>CakePop is Copyright 2012 Ryan Roemer. Released under the MIT License.
-</p>
-
+        
       </div>
     </div>
     <div id='footer'>
