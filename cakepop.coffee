@@ -295,8 +295,13 @@ class Style
           cb err, dirFiles
 
       runLint: ["searchDirs", (cb, results) =>
-        dirFiles = results?.searchDirs ? []
-        args = [files, dirFiles, config].reduce (x, y) -> x.concat y
+        allFiles = files.concat(results?.searchDirs ? [])
+        args = allFiles.concat(config)
+
+        if allFiles.length < 1
+          Utils.print  "No #{cfg.type} files found.\n".info
+          cb null
+          return
 
         Utils.spawn "#{cfg.bin}", args, (code) ->
           err = if code is 0 then null else new Error "checks failed"

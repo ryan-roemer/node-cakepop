@@ -314,11 +314,14 @@
         },
         runLint: [
           "searchDirs", function(cb, results) {
-            var args, dirFiles, _ref;
-            dirFiles = (_ref = results != null ? results.searchDirs : void 0) != null ? _ref : [];
-            args = [files, dirFiles, config].reduce(function(x, y) {
-              return x.concat(y);
-            });
+            var allFiles, args, _ref;
+            allFiles = files.concat((_ref = results != null ? results.searchDirs : void 0) != null ? _ref : []);
+            args = allFiles.concat(config);
+            if (allFiles.length < 1) {
+              Utils.print(("No " + cfg.type + " files found.\n").info);
+              cb(null);
+              return;
+            }
             return Utils.spawn("" + cfg.bin, args, function(code) {
               var err;
               err = code === 0 ? null : new Error("checks failed");
