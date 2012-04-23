@@ -12,7 +12,7 @@ use in pure JavaScript code (e.g., with Jakefiles).
 [cakepop]: https://github.com/ryan-roemer/node-cakepop
 [cakefile]: https://github.com/ryan-roemer/node-cakepop/blob/master/Cakefile
 
-See the [API documenation][api] for full information, or CakePop's own
+See the [API documentation][api] for full information, or CakePop's own
 [`Cakefile`][cakefile] for some example usage.
 
 Documentation is presently in source comments in `cakepop.coffee`. While not
