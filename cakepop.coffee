@@ -229,7 +229,7 @@ class CoffeeBuild
 # @example Cakefile usage
 #   style = new (require("cakepop").Style)()
 #   task "dev:coffeelint", "Run CoffeeScript style checks.", ->
-#     style.coffeelint SOURCE [
+#     style.coffeelint [
 #       "foo.coffee"
 #       "src_dir"
 #     ]
