@@ -81,10 +81,12 @@
     };
 
     Utils.pids = function(pattern, callback) {
+      var cmd;
       if (callback == null) {
         callback = Utils.printCallback;
       }
-      return Utils.exec("ps ax | egrep \"" + pattern + "\" | egrep -v egrep", function(err, matches) {
+      cmd = "ps ax | egrep \"" + pattern + "\" | egrep -v egrep || true";
+      return Utils.exec(cmd, function(err, matches) {
         var m, _ref;
         matches = (_ref = matches != null ? matches.split("\n") : void 0) != null ? _ref : [];
         return callback(err, (function() {

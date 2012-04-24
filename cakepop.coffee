@@ -85,7 +85,8 @@ class Utils
   # @param [Function] callback  Callback on process end (printCallback).
   #
   @pids: (pattern, callback = @printCallback) =>
-    @exec "ps ax | egrep \"#{pattern}\" | egrep -v egrep", (err, matches) ->
+    cmd = "ps ax | egrep \"#{pattern}\" | egrep -v egrep || true"
+    @exec cmd, (err, matches) ->
       matches = matches?.split("\n") ? []
       callback err, (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
 
