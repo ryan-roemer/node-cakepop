@@ -33,6 +33,9 @@
     function Utils() {}
 
     Utils.print = function(data) {
+      if (Array.isArray(data)) {
+        data = "[" + (data.join(', ')) + "]";
+      }
       data = (data != null ? data : "").toString().replace(/[\r\n]+$/, "");
       if (data) {
         return console.log(data);
@@ -40,7 +43,8 @@
     };
 
     Utils.printCallback = function(err, data) {
-      return Utils.print(err != null ? err : (data != null ? data : "Done.").toString());
+      var _ref;
+      return Utils.print((_ref = err != null ? err : data) != null ? _ref : "Done.".info);
     };
 
     Utils.fail = function(msg) {
@@ -89,7 +93,7 @@
       return Utils.exec(cmd, function(err, matches) {
         var m, _ref;
         matches = (_ref = matches != null ? matches.split("\n") : void 0) != null ? _ref : [];
-        return callback(err, (function() {
+        matches = (function() {
           var _i, _len, _results;
           _results = [];
           for (_i = 0, _len = matches.length; _i < _len; _i++) {
@@ -99,7 +103,8 @@
             }
           }
           return _results;
-        })());
+        })();
+        return callback(err, matches);
       });
     };
 

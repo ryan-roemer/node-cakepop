@@ -36,6 +36,7 @@ class Utils
   # @param [String] data String to print.
   #
   @print: (data) ->
+    data = "[#{data.join ', '}]" if Array.isArray data
     data = (data ? "").toString().replace /[\r\n]+$/, ""
     console.log data if data
 
@@ -45,7 +46,7 @@ class Utils
   # @param [String] data  String to print.
   #
   @printCallback: (err, data) =>
-    @print err ? (data ? "Done.").toString()
+    @print err ? data ? "Done.".info
 
   # Log failure and exit process.
   #
@@ -88,7 +89,8 @@ class Utils
     cmd = "ps ax | egrep \"#{pattern}\" | egrep -v egrep || true"
     @exec cmd, (err, matches) ->
       matches = matches?.split("\n") ? []
-      callback err, (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
+      matches = (m.match(/\s*([0-9]+)/)[0] for m in matches when m)
+      callback err, matches
 
   # Return list of files matching egrep pattern.
   #
