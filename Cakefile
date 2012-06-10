@@ -6,7 +6,7 @@ utils   = cakepop.utils
 builder = new cakepop.CoffeeBuild()
 style   = new cakepop.Style
   coffee:
-    config: "/Users/rye/scm/sd/atalanta/dev/coffeelint.json"
+    config: "dev/coffeelint.json"
   js:
     config: "dev/jshint.json"
 
