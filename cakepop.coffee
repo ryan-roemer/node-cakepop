@@ -80,11 +80,18 @@ class Utils
   # Exec with log hooks to stdout, stderr.
   #
   # @param [String]   cmd       Command and arguments.
+  # @param [Object]   [opts]    (Optional) options.
   # @param [Function] callback  Callback on process end (printCallback).
   #
-  @exec: (cmd, callback = @printCallback) =>
+  @exec: (allArgs...) =>
+    # Manually unpack arguments.
+    argsLen   = allArgs.length
+    cmd       = allArgs[0]
+    opts      = if argsLen is 3 then allArgs[1] else {}
+    callback  = allArgs[argsLen - 1] ? @printCallback
+
     @print cmd
-    child_proc.exec cmd, (error, stdout, stderr) ->
+    child_proc.exec cmd, opts, (error, stdout, stderr) ->
       process.stderr.write stderr if stderr
       callback error, stdout.toString()
 

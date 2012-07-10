@@ -70,12 +70,15 @@
       }
     };
 
-    Utils.exec = function(cmd, callback) {
-      if (callback == null) {
-        callback = Utils.printCallback;
-      }
+    Utils.exec = function() {
+      var allArgs, argsLen, callback, cmd, opts, _ref;
+      allArgs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      argsLen = allArgs.length;
+      cmd = allArgs[0];
+      opts = argsLen === 3 ? allArgs[1] : {};
+      callback = (_ref = allArgs[argsLen - 1]) != null ? _ref : Utils.printCallback;
       Utils.print(cmd);
-      return child_proc.exec(cmd, function(error, stdout, stderr) {
+      return child_proc.exec(cmd, opts, function(error, stdout, stderr) {
         if (stderr) {
           process.stderr.write(stderr);
         }
