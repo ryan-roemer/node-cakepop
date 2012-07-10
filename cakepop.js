@@ -61,7 +61,6 @@
       args = allArgs[1];
       opts = argsLen === 4 ? allArgs[2] : {};
       callback = argsLen > 2 ? allArgs[argsLen - 1] : null;
-      console.log(cmd, args, opts, callback);
       Utils.print([cmd, args.join(" ")].join(" "));
       ps = child_proc.spawn(cmd, args, opts);
       ps.stdout.pipe(process.stdout);

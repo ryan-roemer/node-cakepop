@@ -71,9 +71,6 @@ class Utils
     opts      = if argsLen is 4 then allArgs[2] else {}
     callback  = if argsLen > 2 then allArgs[argsLen - 1] else null
 
-    console.log cmd, args, opts, callback
-
-
     @print [cmd, args.join " "].join " "
     ps = child_proc.spawn cmd, args, opts
     ps.stdout.pipe process.stdout
