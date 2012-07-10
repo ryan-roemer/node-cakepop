@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>CakePop v0.0.8</title>
+  <title>CakePop v0.1.0</title>
   <link rel='stylesheet' href='../assets/codo.css' type='text/css'>
   <script src='../assets/codo.js'></script>
   <script src='../assets/search_data.js'></script>
@@ -158,7 +158,7 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
   <li>
     <span class='signature'>
       <a href='#spawn-class'>
-        + (void) <strong>spawn</strong>(cmd, args = [], callback = null)
+        + (void) <strong>spawn</strong>(allArgs...)
       </a>
     </span>
     <span class='bound note title'>Bound</span>
@@ -169,7 +169,7 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
   <li>
     <span class='signature'>
       <a href='#exec-class'>
-        + (void) <strong>exec</strong>(cmd, callback = @printCallback)
+        + (void) <strong>exec</strong>(allArgs...)
       </a>
     </span>
     <span class='bound note title'>Bound</span>
@@ -276,7 +276,7 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
   </div>
   <div class='method_details'>
     <p class='signature' id='spawn-class'>
-      + (void) <strong>spawn</strong>(cmd, args = [], callback = null)
+      + (void) <strong>spawn</strong>(allArgs...)
       (bound)
     </p>
     <div class='docstring'>
@@ -302,6 +302,14 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
       <span class='desc'>Array of arguments to command.</span>
     </li>
     <li>
+      <span class='name'>[Object]</span>
+      <span class='type'>
+        (<tt>opts</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>(Optional) options.</span>
+    </li>
+    <li>
       <span class='name'>callback</span>
       <span class='type'>
         (<tt>Function</tt>)
@@ -314,7 +322,7 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
   </div>
   <div class='method_details'>
     <p class='signature' id='exec-class'>
-      + (void) <strong>exec</strong>(cmd, callback = @printCallback)
+      + (void) <strong>exec</strong>(allArgs...)
       (bound)
     </p>
     <div class='docstring'>
@@ -330,6 +338,14 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
       </span>
       &mdash;
       <span class='desc'>Command and arguments.</span>
+    </li>
+    <li>
+      <span class='name'>[Object]</span>
+      <span class='type'>
+        (<tt>opts</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>(Optional) options.</span>
     </li>
     <li>
       <span class='name'>callback</span>
@@ -414,11 +430,11 @@ task &quot;hello&quot;, &quot;Print Hello World!&quot;, -&gt;
     </div>
     <div id='footer'>
   Generated on
-  Tue Apr 24 2012 10:06:44 GMT-0400 (EDT)
+  Tue Jul 10 2012 12:46:56 GMT-0400 (EDT)
   by
   <a href='https://github.com/netzpirat/codo' title='CoffeeScript API documentation generator'>Codo</a>
   v0.7.0
-  (Node.js v0.6.15).
+  (Node.js v0.8.2).
   &#10034;
   Press Ctrl-h to see the keyboard shortcuts
   &#10034;
