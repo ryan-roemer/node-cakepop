@@ -64,10 +64,6 @@ Build CoffeeScript files to JavaScript:
 
 See the API documentation for more.
 
-Roadmap
-=======
-* Tasks / Helpers:
-    * JsHint
 
 License
 =======

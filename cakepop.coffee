@@ -60,11 +60,19 @@ class Utils
   #
   # @param [String]         cmd       Command / binary path.
   # @param [Array<String>]  args      Array of arguments to command.
+  # @param [Object]         [opts]    (Optional) options.
   # @param [Function]       callback  Callback on process end (or null).
   #
-  @spawn: (cmd, args = [], callback = null) =>
+  @spawn: (allArgs...) =>
+    # Manually unpack arguments.
+    argsLen   = allArgs.length
+    cmd       = allArgs[0]
+    args      = allArgs[1]
+    opts      = if argsLen is 4 then allArgs[2] else {}
+    callback  = allArgs[argsLen - 1] ? null
+
     @print [cmd, args.join " "].join " "
-    ps = child_proc.spawn cmd, args
+    ps = child_proc.spawn cmd, args, opts
     ps.stdout.pipe process.stdout
     ps.stderr.pipe process.stderr
     ps.on "exit", callback if callback
