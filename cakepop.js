@@ -54,13 +54,14 @@
     };
 
     Utils.spawn = function() {
-      var allArgs, args, argsLen, callback, cmd, opts, ps, _ref;
+      var allArgs, args, argsLen, callback, cmd, opts, ps;
       allArgs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       argsLen = allArgs.length;
       cmd = allArgs[0];
       args = allArgs[1];
       opts = argsLen === 4 ? allArgs[2] : {};
-      callback = (_ref = allArgs[argsLen - 1]) != null ? _ref : null;
+      callback = argsLen > 2 ? allArgs[argsLen - 1] : null;
+      console.log(cmd, args, opts, callback);
       Utils.print([cmd, args.join(" ")].join(" "));
       ps = child_proc.spawn(cmd, args, opts);
       ps.stdout.pipe(process.stdout);
@@ -71,12 +72,15 @@
     };
 
     Utils.exec = function() {
-      var allArgs, argsLen, callback, cmd, opts, _ref;
+      var allArgs, argsLen, callback, cmd, opts;
       allArgs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       argsLen = allArgs.length;
       cmd = allArgs[0];
       opts = argsLen === 3 ? allArgs[1] : {};
-      callback = (_ref = allArgs[argsLen - 1]) != null ? _ref : Utils.printCallback;
+      callback = argsLen > 1 ? allArgs[argsLen - 1] : null;
+      if (!callback) {
+        callback = Utils.printCallback;
+      }
       Utils.print(cmd);
       return child_proc.exec(cmd, opts, function(error, stdout, stderr) {
         if (stderr) {

@@ -69,7 +69,10 @@ class Utils
     cmd       = allArgs[0]
     args      = allArgs[1]
     opts      = if argsLen is 4 then allArgs[2] else {}
-    callback  = allArgs[argsLen - 1] ? null
+    callback  = if argsLen > 2 then allArgs[argsLen - 1] else null
+
+    console.log cmd, args, opts, callback
+
 
     @print [cmd, args.join " "].join " "
     ps = child_proc.spawn cmd, args, opts
@@ -88,7 +91,8 @@ class Utils
     argsLen   = allArgs.length
     cmd       = allArgs[0]
     opts      = if argsLen is 3 then allArgs[1] else {}
-    callback  = allArgs[argsLen - 1] ? @printCallback
+    callback  = if argsLen > 1 then allArgs[argsLen - 1] else null
+    callback  = @printCallback unless callback
 
     @print cmd
     child_proc.exec cmd, opts, (error, stdout, stderr) ->

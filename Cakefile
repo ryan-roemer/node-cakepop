@@ -15,12 +15,16 @@ CS_SOURCE = [
   "cakepop.coffee"
 ]
 
+CS_BUILD = [
+  "cakepop.coffee"
+]
+
 JS_SOURCE = [
   "cakepop.js"
 ]
 
-BUILD = [
-  "cakepop.coffee"
+BUILD_PATHS = [
+  "doc"
 ]
 
 codo = (cb) ->
@@ -34,12 +38,15 @@ codo = (cb) ->
 task "prepublish", "Run everything to get ready for publish.", ->
   async.series [
     (cb) -> style.coffeelint CS_SOURCE, cb
-    (cb) -> builder.build BUILD, cb
+    (cb) -> builder.build CS_BUILD, cb
     (cb) -> style.jshint JS_SOURCE, cb
     (cb) -> codo cb
   ], (err) ->
     utils.fail err if err
     utils.print "\nPrepublish finished successfully".info
+
+task 'dev:clean', "Remove all unnecessary build files.", ->
+  utils.spawn "rm", ["-rf"].concat(BUILD_PATHS)
 
 task "dev:coffeelint", "Run CoffeeScript style checks.", ->
   style.coffeelint CS_SOURCE
