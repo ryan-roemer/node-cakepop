@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/ryan-roemer/node-cakepop.png)](http://travis-ci.org/ryan-roemer/node-cakepop)
 CakePop!
 ========
 [CakePop][cakepop] is a set of Node.js build helpers and CoffeeScript Cake
