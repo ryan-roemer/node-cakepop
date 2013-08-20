@@ -12,7 +12,7 @@
 
   extend = require('deep-extend');
 
-  fileUtils = require('file-utils');
+  fileUtils = require('./file-utils');
 
   colors.setTheme({
     silly: 'rainbow',

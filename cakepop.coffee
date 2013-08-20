@@ -5,7 +5,7 @@ child_proc  = require 'child_process'
 async       = require 'async'
 colors      = require 'colors'
 extend      = require 'deep-extend'
-fileUtils   = require 'file-utils'
+fileUtils   = require './file-utils'
 
 # Colors configuration
 colors.setTheme
