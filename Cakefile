@@ -40,7 +40,7 @@ task "prepublish", "Run everything to get ready for publish.", ->
     (cb) -> style.coffeelint CS_SOURCE, cb
     (cb) -> builder.build CS_BUILD, cb
     (cb) -> style.jshint JS_SOURCE, cb
-    (cb) -> codo cb
+    #(cb) -> codo cb
   ], (err) ->
     utils.fail err if err
     utils.print "\nPrepublish finished successfully".info
