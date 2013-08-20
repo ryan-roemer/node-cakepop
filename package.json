@@ -1,7 +1,7 @@
 {
   "name": "cakepop",
   "description": "CoffeScript Cake extensions.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Ryan Roemer <ryan@loose-bits.com>",
   "url": "http://ryan-roemer.github.com/node-cakepop",
   "repository": {
@@ -15,7 +15,6 @@
   "dependencies": {
     "async": "0.1.18",
     "colors": "0.6.0-1",
-    "file-utils": "0.1.6",
     "deep-extend": "0.2.2"
   },
   "devDependencies": {
